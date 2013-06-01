@@ -1,0 +1,43 @@
+<div class="row-fluid box-title">
+	<div class="span12 manage-courses-header">
+		<h3 style="margin: 0;">Manage My Courses</h3>
+	</div>
+</div>
+
+<div class="row-fluid">
+	<div class="span12">
+		<ul class="nav nav-tabs manage-course-tabs">
+			<li><a href="#/courses"><i class="icon-th-large"></i> List</a></li>
+			<li><a href="#/courses/join"><i class="icon-pushpin"></i> Join Existing</a></li>
+			<li ng-class="{active: templateType == 'create'}"><a href="#/courses/create"><i class="icon-plus"></i> Create</a></li>
+			<li class="active" ng-show="templateType == 'edit'"><a><i class="icon-edit"></i> Edit</a></li>
+		</ul>
+
+		<h4 style="margin: 15px 0 15px 0;">Course Details</h4>
+
+		<form class="form-horizontal create-form">			
+			<fieldset>
+				<div class="control-group">
+					<label class="control-label" for="courseNameInput">Course Name</label>
+					<div class="controls">
+						<input type="text" class="input-block-level" id="courseNameInput" ng-model="course.name">
+						<p class="help-block">i.e. ENGGEN131</p>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label" for="courseDescriptionInput">Course Description</label>
+					<div class="controls">
+						<textarea class="input-block-level" id="courseDescriptionInput" ng-model="course.description" style=" height: 80px; resize: vertical;"></textarea>
+						<p class="help-block">i.e. An introduction to Programming</p>
+					</div>
+				</div>
+				
+				<div class="form-actions">
+					<button type="submit" class="btn btn-success" ng-click="save()">Save Course</button>
+					<button class="btn" ng-click="cancel()">Cancel</button>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+</div>

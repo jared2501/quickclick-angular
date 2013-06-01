@@ -1,0 +1,200 @@
+<div class="row-fluid box-title">
+	<div class="span12">
+		<div class="pull-left">
+			<a tooltip-placement="bottom" tooltip="Go back to manage courses page" tooltip-popup-delay="300"
+				class="btn btn-primary pull-left" style="margin-right: 5px;"
+				ng-href="#/courses">
+				<i class="icon-arrow-left"></i>
+			</a>
+			<term-modal options="modalOptions" course="course" semester="semester"
+				tooltip-placement="bottom" tooltip="Change the current course or semester" tooltip-popup-delay="300"
+				class="pull-left">
+				<h3 style="margin: 0;">
+					{{course.name}}: {{semester.name}}
+				</h3>
+			</term-modal>
+		</div>
+
+		<ul class="nav nav-pills pull-right">
+			<li class="active"><a >Questions</a></li>
+			<li><a ng-href="#/{{course.id}}/{{semester.id}}/courses/students/list">Students</a></li>
+		</ul>
+	</div>
+</div>
+
+<div class="row-fluid">
+	<div class="span12">
+		<ul class="nav nav-tabs manage-course-tabs">
+			<li><a ng-href="#/{{course.id}}/{{semester.id}}/questions/list"><i class="icon-th-large"></i> List</a></li>
+			<li><a ng-href="#/{{course.id}}/{{semester.id}}/questions/trash"><i class="icon-trash"></i> Trash</a></li>
+			<li ng-class="{active: templateType == 'create'}"><a ng-href="#/{{course.id}}/{{semester.id}}/questions/create"><i class="icon-plus"></i> Create</a></li>
+			<li class="active" ng-show="templateType == 'edit'"><a href=""><i class="icon-edit"></i> Edit</a></li>
+			<li ng-show="templateType == 'edit'"><a ng-href="#/{{course.id}}/{{semester.id}}/results/{{question.id}}"><i class="icon-bar-chart"></i> Results</a></li>
+		</ul>
+
+
+		<h4 style="margin: 10px 0 10px 0;" ng-show="templateType == 'edit'">Editing {{question.code}} - {{question.title}}</h4>
+
+		<form action="#" method="get" class="form-horizontal create-form">
+			<fieldset>
+				<div class="form-actions" style="margin-bottom: 18px;">
+					<a class="btn btn-success" ng-click="save()">
+						<i class="icon-unicorn-calendar"></i>
+						<span>Save Question</span>
+					</a>
+					<a class="btn" ng-click="cancel()">
+						Cancel
+					</a>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label" for="titleInput">Title</label>
+					<div class="controls">
+						<input type="text" id="titleInput" class="span6" placeholder="Title" ng-model="question.title">
+						<span class="help-inline pull-right">
+							<a href=""
+								popover-placement="left"	popover-title="Question Title"
+								popover="The title of a question is like the subject of an email. It is used for organizational purposes.<br>You can also tag questions, so we recommend keeping titles short and logically structured.">
+								<i class="icon-lightbulb"></i> What's this?
+							</a>
+						</span>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label" for="bodyInput">Body</label>
+					<div class="controls">
+						<textarea
+							wysiwyg
+							id="bodyInput"
+							class="input-block-level"
+							rows="6"
+							ng-model="question.body"></textarea>
+					</div>
+				</div>
+
+				<hr>
+
+				<div class="control-group" ng-repeat="option in question.options">
+					<label
+						class="control-label"
+						for="optionBodyInput{{$index}}">
+							Option {{option.number = $index | numToLetter}}
+						<br/>
+
+						<a
+							ng-show="option.submission_count == null || option.submission_count < 1"
+							ng-click="question.options.splice($index,1)">
+								(delete)
+						</a>
+
+						<span
+							class="label label-info"
+							ng-show="option.submission_count > 0">
+								{{option.submission_count}} Response&#40;s&#41;
+						</span>
+					</label>
+
+					<div class="controls">
+						<textarea
+							wysiwyg
+							id="optionBodyInput{{$index}}"
+							class="input-block-level"
+							rows="6"
+							ng-model="question.options[$index].body"
+							>
+						</textarea>
+					</div>
+				</div>
+
+				<div class="form-actions" style="margin-bottom: 18px;">
+					<a
+						class="btn btn-primary"
+						ng-click="question.options.push({})">
+							<i class="icon-plus icon-white"></i> Add Option
+					</a>
+				</div>
+			</fieldset>
+
+			<legend>Correct Option&#40;s&#41;</legend>
+			<fieldset>
+				<div class="control-group">
+					<label class="control-label">Correct Option(s)</label>
+					<div class="controls">
+						<label class="checkbox" ng-repeat="option in question.options">
+							<input type="checkbox" ng-model="option.correct"> Option {{$index | numToLetter}}
+						</label>
+					</div>
+				</div>
+			</fieldset>
+
+
+			<legend>Accessibility</legend>
+			<fieldset>
+				<div class="control-group">
+					<label class="control-label" for="maxResponsesInput">Max Responses/Student</label>
+					<div class="controls">
+						<select id="maxResponsesInput" class="span3" ng-model="question.max_responses">
+							<option value="0">Unlimited</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+						</select>
+						<span class="help-inline pull-right">
+							<a href=""
+								popover-placement="left"	popover-title="Max Responses"
+								popover="This select box controls how many times people can respond to this question. For example, if you select 'Unlimited', people can respond as many times as they wish. While if you select '1', people will only be able to respond once. Further submissions will not be counted.">
+									<i class="icon-lightbulb"></i> What's this?
+							</a>
+						</span>
+					</div>
+				</div>
+
+
+				<div class="control-group">
+					<label class="control-label" for="hiddenInput">Hidden Question</label>
+					<div class="controls">
+						<label class="checkbox">
+							<input id="hiddenInput" type="checkbox" ng-model="question.hidden">
+							<span class="help-inline pull-right">
+								<a href=""
+									popover-placement="left"	popover-title="Hidden/Unhidden Status"
+									popover="People responding to a hidden question must have the Question ID to be able to find the question. A question that is <strong>not</strong> hidden will be displayed on the <a href='/find'>list of open questions</a>.">
+										<i class="icon-lightbulb"></i> What's this?
+								</a>
+							</span>
+						</label>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label" for="openInput">Open</label>
+					<div class="controls">
+						<label class="checkbox">
+							<input id="openInput" type="checkbox" ng-model="question.open">
+							<span class="help-inline pull-right">
+								<a href=""
+									popover-placement="left"	popover-title="Open/Closed Status"
+									popover="This checkbox controls whether a question is open or closed. An open question is ready to receive responses, and a closed question will no longer accept responses.">
+										<i class="icon-lightbulb"></i> What's this?
+								</a>
+							</span>
+						</label>
+					</div>
+				</div>
+			</fieldset>
+
+			<div class="form-actions">
+				<a class="btn btn-success" ng-click="save()">
+					<i class="icon-unicorn-calendar"></i>
+					<span>Save Question</span>
+				</a>
+				<a class="btn" ng-click="cancel()">
+					Cancel
+				</a>
+			</div>
+		</form>
+	</div>
+</div>

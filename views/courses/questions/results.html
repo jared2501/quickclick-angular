@@ -1,0 +1,173 @@
+<div class="row-fluid box-title">
+	<div class="span12">
+		<div class="pull-left">
+			<a tooltip-placement="bottom" tooltip="Go back to manage courses page" tooltip-popup-delay="300"
+				class="btn btn-primary pull-left" style="margin-right: 5px;"
+				ng-href="#/courses">
+				<i class="icon-arrow-left"></i>
+			</a>
+			<term-modal options="modalOptions" course="course" semester="semester"
+				tooltip-placement="bottom" tooltip="Change the current course or semester" tooltip-popup-delay="300"
+				class="pull-left">
+				<h3 style="margin: 0;">
+					{{course.name}}: {{semester.name}}
+				</h3>
+			</term-modal>
+		</div>
+
+		<ul class="nav nav-pills pull-right">
+			<li class="active"><a >Questions</a></li>
+			<li><a ng-href="#/{{course.id}}/{{semester.id}}/courses/students/list">Students</a></li>
+		</ul>
+	</div>
+</div>
+
+<div class="row-fluid">
+	<div class="span12">
+		<ul class="nav nav-tabs manage-course-tabs">
+			<li>
+				<a ng-href="#/{{course.id}}/{{semester.id}}/questions/list">
+					<i class="icon-th-large"></i> List
+				</a>
+			</li>
+			<li>
+				<a ng-href="#/{{course.id}}/{{semester.id}}/questions/trash">
+					<i class="icon-trash"></i> Trash
+				</a>
+			</li>
+			<li>
+				<a href="#/{{course.id}}/{{semester.id}}/questions/create">
+					<i class="icon-plus"></i> Create
+				</a>
+			</li>
+			<li>
+				<a href="#/{{course.id}}/{{semester.id}}/questions/{{question.id}}">
+					<i class="icon-edit"></i> Edit
+				</a>
+			</li>
+			<li class="active">
+				<a href="">
+					<i class="icon-bar-chart"></i> Results
+				</a>
+			</li>
+
+			<li class="pull-right"></li>
+		</ul>
+
+		<div class="row-fluid" style="margin: 10px 0 5px 0;">
+			<div class="span12 results">
+				<h4 class="pull-left" style="line-height: 28px; margin: 0;">
+					<span class="badge badge-info"
+						tooltip-placement="top" tooltip="Question ID" tooltip-popup-delay="300">
+						{{question.id}}
+					</span>
+
+					{{question.title}}
+				</h4>
+
+				<div class="pull-right">
+					<div class="btn-group">
+						<a class="btn dropdown-toggle" href="">
+							<i class="icon-remove-sign" ng-show="!showResults"></i>
+							<i class="icon-star-half" ng-show="showResults && !showAnswers"></i>
+							<i class="icon-star" ng-show="showResults && showAnswers"></i>
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li ng-class="{disabled: !showResults}">
+								<a tabindex="-1" href="" ng-click="showResults = false">
+									<i class="icon-remove-sign"></i> Hide Results
+								</a>
+							</li>
+							<li ng-class="{disabled: showResults && !showAnswers}">
+								<a tabindex="-1" href="" ng-click="showResults = true; showAnswers = false">
+									<i class="icon-star-half"></i> Show Results
+								</a>
+							</li>
+							<li ng-class="{disabled: showResults && showAnswers}">
+								<a tabindex="-1" href="" ng-click="showResults = true; showAnswers = true">
+									<i class="icon-star"></i> Show Answers
+								</a>
+							</li>
+						</ul>
+					</div>
+
+					<div class="btn-group" style="margin-left: 0;">
+						<a class="btn dropdown-toggle" href="">
+							<i style="color: #468847;" class="icon-play" ng-show="question.open"></i>
+							<i style="color: #b94a48;" class="icon-pause" ng-show="!question.open"></i>
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li ng-class="{disabled: question.open}">
+								<a tabindex="-1" href="" ng-click="open()">
+									<i style="color: #468847;" class="icon-play"></i> Open Question
+								</a>
+							</li>
+							<li ng-class="{disabled: !question.open}">
+								<a href="" ng-click="close()">
+									<i style="color: #b94a48;" class="icon-pause"></i> Close Question
+								</a>
+							</li>
+						</ul>
+					</div>
+
+					<span style="margin-right: 5px;"
+						tooltip-placement="top" tooltip="Show QR code for this question" tooltip-popup-delay="300">
+						<a href="" class="btn"
+							popover-placement="bottom" popover="<img src='https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=http%3A%2F%2Fqc.auckland.ac.nz%2Fanswer%2F{{question.id}}'></img>">
+							<i class="icon-qrcode"></i>
+						</a>
+					</span>
+					
+
+					<a class="btn"
+						ng-disabled="nextQuestion.disabled"
+						ng-href="{{nextQuestion.link}}"
+						tooltip-placement="top" tooltip="{{nextQuestion.title}}" tooltip-popup-delay="300">
+						<i class="icon-chevron-up"></i>
+					</a>
+
+					<a class="btn"
+						ng-disabled="previousQuestion.disabled"
+						ng-href="{{previousQuestion.link}}"
+						tooltip-placement="top" tooltip="{{previousQuestion.title}}" tooltip-popup-delay="300">
+						<i class="icon-chevron-down"></i>
+					</a>
+					
+				</div>
+			</div>
+		</div>
+
+		<div class="row-fluid">
+			<div class="span12 results">
+				<div ng-bind-html-unsafe="question.body" style="overflow: auto;"></div>
+
+				<span class="label label-info">{{question.submission_count}} Total Responses</span>
+					
+				<hr>
+
+				<ul class="options">
+					<li ng-repeat="option in question.options" >
+						<strong>Option {{option.number | numToLetter}}</strong>
+						
+						<div ng-bind-html-unsafe="option.body"></div>
+
+						<div ng-show="showResults">
+							<div results-bar count="option.submission_count"
+								total-count="question.submission_count"
+								is-correct="option.correct"
+								show-answers="showAnswers"></div>
+						</div>
+					</li>
+				</ul>
+				<hr>
+
+				<div class="alert alert-info" style="margin: 0;">
+					To answer this question visit <a ng-href="http://quickclick.co.nz/answer/{{question.id}}"><strong>quickclick.co.nz/answer/{{question.id}}</strong></a>
+				</div>
+				<hr ng-show="false">
+			</div>
+		</div>
+	</div>
+</div>

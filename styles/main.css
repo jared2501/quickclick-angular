@@ -1,0 +1,179 @@
+/* Wrapper for page content to push down footer */
+#wrap {
+  margin: 0 auto -59px;
+}
+
+/* Set the fixed height of the footer here */
+#push,
+#footer {
+  height: 59px;
+}
+
+/* For tighter responsive design for the admin dashboard only!! */
+@media (max-width: 979px) and (min-width: 768px) {
+	.container,
+	.navbar-static-top .container,
+	.navbar-fixed-top .container,
+	.navbar-fixed-bottom .container {
+		width: auto;
+	}
+}
+
+@media (max-width: 979px) {
+	body {
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+	/* All three styles below to avoid scrolling sideways */
+	.navbar-fixed-top, .navbar-fixed-bottom, .navbar-static-top {
+		margin-left: -10px;
+		margin-right: -10px;
+	}
+	.footer {
+		margin-left: -10px;
+		margin-right: -10px;
+	}
+	.subnavbar {
+		margin-left: -10px;
+		margin-right: -10px;
+
+		margin-bottom: 10px;
+	}
+	
+	.navbar .brand {
+		margin-left: 0;
+	}
+
+	#main {
+		margin-right: -10px;
+		margin-left: -10px;	
+	}
+	
+	.extra {
+		margin-right: -10px;
+		margin-left: -10px;
+	}
+	
+	.footer {
+		margin-right: -10px;
+		margin-left: -10px;
+	}
+
+	.shadow-box {
+		padding: 10px;
+	}
+
+	.main {
+		padding-bottom: 10px;
+	}
+}
+
+
+/* ====================
+ Title for shadow box */
+.box-title {
+	margin-bottom: 5px;
+	height: 34px;
+}
+
+
+/* ====================
+ Bootstrap forms change */
+.create-form {
+	margin: 0;
+}
+.create-form .form-actions {
+	margin: 0;
+}
+.form-actions {
+	border-top: none;
+}
+
+
+/* Tabs and nav pills */
+.nav-tabs,
+.nav-pills {
+	margin: 0;
+}
+
+/* Question edit create form */
+.help-inline {
+	margin-right: 30px;
+}
+
+/* item table actions */
+.item-table-actions-container {
+	padding: 10px 0 10px 0;
+	border-bottom: 1px solid #ddd;
+}
+.item-table-actions {
+	margin: 0 0 0 10px;
+}
+.item-table-actions > a,
+.item-table-actions > input,
+.item-table-actions > .btn-group {
+	margin: 0 10px 0 0;
+	line-height: 28px;
+}
+.item-table-actions a.disabled {
+	opacity: 0.5;
+	cursor: default;
+	text-decoration: none;
+}
+.item-table-actions-container .checkbox-label {
+	height: 28px;
+}
+
+
+/* item table */
+table.item-table {
+	border-bottom: 1px solid #ddd;
+	margin: 0;
+}
+table.item-table tr:first-child td {
+	border-top: none;
+}
+table.item-table td {
+	margin: 0;
+	padding: 0;
+	background-color: #f5f5f5;
+}
+table.item-table td.checkbox {
+	width: 36px;
+}
+table.item-table td.comfortable {
+	padding: 10px 0 10px 0;
+}
+table.item-table tr.selected td {
+	background-color: #ffc;
+}
+table.item-table td.alert {
+	background-color: #fcf8e3;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	border-radius: 0;
+	border-top: none;
+
+	text-align: center;
+	padding: 15px;
+}
+.pagination {
+	text-align: center;
+	margin: 10px 0 0 0;
+	height: 28px;
+}
+
+
+/* Checkbox css */
+.checkbox-label {
+	height: 35px;
+	width: 36px;
+	background-image: url('../img/icons/checkbox_empty.png');
+	background-position: center center;
+	background-repeat: no-repeat;
+}
+.checkbox-label.checkbox-selected {
+	background-image: url('../img/icons/checkbox_full.png');
+	background-position: center center; 
+	background-repeat: no-repeat;
+}

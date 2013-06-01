@@ -1,0 +1,46 @@
+/* Results page css */
+.results,
+.results p,
+.results pre,
+.results span {
+	font-size: 14px;
+}
+
+.results .label,
+.results .badge {
+	font-size: 12px;
+}
+
+.results ul.options {
+	margin: 0;
+}
+
+.results ul.options li {
+	position: relative;
+	list-style: none;
+	margin-bottom: 8px;
+}
+
+.results .progress {
+	 margin: 3px 0 0 0;
+	 position: relative;
+}
+
+.results .progress .responses {
+	position: absolute;
+	top: 0;
+	left: 15px;
+}
+
+.results hr {
+	margin: 10px 0;
+}
+
+/* Important for results page to get rid of css3 transitions */
+.progress .bar {
+	-webkit-transition: none;
+	-moz-transition: none;
+	-ms-transition: none;
+	-o-transition: none;
+	transition: none;
+}​

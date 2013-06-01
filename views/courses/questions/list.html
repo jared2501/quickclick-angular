@@ -1,0 +1,298 @@
+<div class="row-fluid box-title">
+	<div class="span12">
+		<div class="pull-left">
+			<a tooltip-placement="bottom" tooltip="Go back to manage courses page" tooltip-popup-delay="300"
+				class="btn btn-primary pull-left" style="margin-right: 5px;"
+				ng-href="#/courses">
+				<i class="icon-arrow-left"></i>
+			</a>
+			<term-modal options="modalOptions" course="course" semester="semester"
+				tooltip-placement="bottom" tooltip="Change the current course or semester" tooltip-popup-delay="300"
+				class="pull-left">
+				<h3 style="margin: 0;">
+					{{course.name}}: {{semester.name}}
+				</h3>
+			</term-modal>
+		</div>
+
+		<ul class="nav nav-pills pull-right">
+			<li class="active"><a >Questions</a></li>
+			<li><a ng-href="#/{{course.id}}/{{semester.id}}/courses/students/list">Students</a></li>
+		</ul>
+	</div>
+</div>
+
+<div class="row-fluid">
+	<div class="span12">
+		<!-- BEGIN Tabs -->
+		<ul class="nav nav-tabs">
+			<li ng-class="{active: templateType == 'list'}">
+				<a ng-href="#/{{course.id}}/{{semester.id}}/questions/list">
+					<i class="icon-th-large"></i> List
+				</a>
+			</li>
+			<li ng-class="{active: templateType == 'trash'}">
+				<a ng-href="#/{{course.id}}/{{semester.id}}/questions/trash">
+					<i class="icon-trash"></i> Trash
+				</a>
+			</li>
+			<li>
+				<a ng-href="#/{{course.id}}/{{semester.id}}/questions/create">
+					<i class="icon-plus"></i> Create
+				</a>
+			</li>
+		</ul>
+
+		<!-- BEGIN Table Actions -->
+		<div class="item-table-actions-container clearfix" ng-show="questionPage.questions.length > 0">
+			<div class="pull-left">
+				<!-- All checkbox -->
+				<div class="question-checkbox pull-left">
+					<div class="checkbox-label"
+						div-checkbox-all
+						total-objects="questionPage.questions"
+						selected-objects="selectedQuestions"></div>
+				</div>
+
+				<div class="item-table-actions pull-left" ng-show="templateType == 'list'">
+					<a href="" ng-class="{disabled: selectedQuestions.length < 1}" ng-click="trash()"
+						tooltip-placement="top" tooltip="Send selected questions to bin" tooltip-popup-delay="300">
+						<i class="icon-trash"></i>
+						Trash
+					</a>
+					<a href="" ng-class="{disabled: selectedQuestions.length < 1}" ng-click="copyModalOpen()"
+						tooltip-placement="top" tooltip="Create a copy of selected questions" tooltip-popup-delay="300">
+						<i class="icon-copy"></i>
+						Copy
+					</a>
+
+					<a href="" ng-class="{disabled: selectedQuestions.length < 1}" style="color: #468847;" ng-click="open()"
+						tooltip-placement="top" tooltip="Open selected questions" tooltip-popup-delay="300">
+						<i class="icon-play"></i>
+						Open
+					</a>
+					<a href="" ng-class="{disabled: selectedQuestions.length < 1}" style="color: #b94a48;" ng-click="close()"
+						tooltip-placement="top" tooltip="Close selected questions" tooltip-popup-delay="300">
+						<i class="icon-pause"></i>
+						Close
+					</a>
+				</div>
+
+				<div class="item-table-actions pull-left" ng-show="templateType == 'trash'">
+					<a href="" ng-class="{disabled: selectedQuestions.length < 1}" ng-click="delete()"
+						tooltip-placement="top" tooltip="Permanently delete selected questions" tooltip-popup-delay="300">
+						<i class="icon-remove"></i> 
+						Delete
+					</a>
+
+					<a href="" ng-class="{disabled: selectedQuestions.length < 1}" ng-click="restore()"
+						tooltip-placement="top" tooltip="Restore selected questions to list" tooltip-popup-delay="300">
+						<i class="icon-repeat"></i> 
+						Restore
+					</a>
+				</div>
+			</div>
+			
+			<div class="item-table-actions pull-right">
+				<div class="btn-group pull-right" ng-show="templateType == 'list'">
+					<a class="btn dropdown-toggle tip-bottom" title="Filter the list of questions">
+						<i class="label label-success" ng-show="search.open == true">Open</i> 
+						<i class="label label-important" ng-show="search.open == false">Closed</i> 
+						<i class="icon-filter" ng-show="search.open == null"></i>
+						<span class="caret"></span>
+					</a>
+					<ul class="dropdown-menu">
+						<li>
+							<a href="" tabindex="-1" ng-click="search = null">No Filter</a>
+						</li>
+						<li>
+							<a href="" tabindex="-1" ng-click="search.open = true"><i class="label label-success">Open</i> Questions Only</a>
+						</li>
+						<li>
+							<a href="" tabindex="-1" ng-click="search.open = false"><i class="label label-important">Closed</i> Questions Only</a>
+						</li>
+					</ul>
+				</div>
+
+				<input type="text" class="pull-right" placeholder="Search questions..." ng-model="searchText">
+			</div>
+		</div><!-- END Table Actions -->
+
+		<!-- BEGIN Item table -->
+		<table class="table item-table">
+			<tbody>
+				<tr ng-class="{selected: question.selected}"
+					ng-repeat="question in questionPage.questions | filter:searchText | filter:search">
+					<td class="checkbox">
+						<div class="checkbox-label"
+							div-checkbox="question"
+							selected-objects="selectedQuestions"></div>
+					</td>
+
+					<td class="cozy" style="width: 40px">
+						<span class="badge badge-info" style="cursor: default;"
+							tooltip-placement="top" tooltip="Question ID" tooltip-popup-delay="300">
+							{{question.id}}
+						</span>
+					</td>
+					
+					<td class="comfortable" style="padding-left: 3px;">
+						<div>
+							<strong ng-show="templateType != 'list'">
+								{{question.title}}
+							</strong>
+
+							<a ng-show="templateType == 'list'" ng-href="#/{{course.id}}/{{semester.id}}/results/{{question.id}}">
+								{{question.title}}
+							</a>
+
+							<br>
+
+							<span ng-show="templateType == 'trash'">
+								{{question.title}}
+							</span>
+							<span truncate="{{question.body}}" truncate-length="100" style="color: #777;"></span>
+
+							<span ng-show="templateType == 'list'">
+								<span style="margin: 0 2px 0 2px;">
+									—
+								</span>
+
+								<i class="icon-tags" style="margin-right: 3px;"></i>
+								<span tag="question" class="label" ng-repeat="tag in question.tags" style="font-size: 12px; margin-right: 3px;">{{tag}}</span>
+								
+								<span ng-show="templateType == 'list'"
+									tooltip-placement="top" tooltip="Add a tag to this question" tooltip-popup-delay="300">
+									<span add-tags="question"></span>
+								</span>
+							</span>
+						</div>
+					</td>
+
+					<td class="comfortable" style="padding-right: 3px; width: 40px;">
+						<div ng-show="templateType == 'list'">
+							<span class="label label-success" style="cursor: default;"
+								ng-show="question.hidden && question.open"
+								tooltip-placement="top" tooltip="Question is open, but hidden, has {{question.submission_count}} responses" tooltip-popup-delay="300">
+									<i class="icon-eye-open icon-white"></i>
+									{{question.submission_count}}
+							</span>
+							<span class="label label-success" style="cursor: default;"
+								ng-show="!question.hidden && question.open"
+								tooltip-placement="top" tooltip="Question is open, has {{question.submission_count}} responses" tooltip-popup-delay="300">
+								<i class="icon-play icon-white"></i>
+								{{question.submission_count}}
+							</span>
+							<span class="label label-important" style="cursor: default;"
+								ng-show="!question.open"
+								tooltip-placement="top" tooltip="Question is closed, has {{question.submission_count}} responses" tooltip-popup-delay="300">
+								<i class="icon-pause icon-white"></i>
+								{{question.submission_count}}
+							</span>
+						</div>
+					</td>
+
+					<td class="comfortable" style="width: 130px;">
+						<a class="btn" ng-href="#/{{course.id}}/{{semester.id}}/questions/{{question.id}}"
+							title="Edit question">
+							<i class="icon-edit"></i>
+						</a>
+
+						<a class="btn" ng-click="qrModalOpen(question)"
+							title="Get QR code for question">
+							<i class="icon-qrcode"></i>
+						</a>
+
+						<a class="btn " ng-href="#/{{course.id}}/{{semester.id}}/results/{{question.id}}"
+							title="View question results">
+							<i class="icon-bar-chart"></i>
+						</a>
+					</td>
+				</tr>
+
+				<!-- Warnings and Info -->
+				<tr ng-show="questionPage.questions == null">
+					<td colspan="2" class="alert">
+						<span>Loading...</span>
+					</td>
+				</tr>
+
+				<tr ng-show="questionPage.questions != null && questionPage.questions.length < 1 && templateType != 'trash'">
+					<td class="alert">
+						<span>There are no questions here! To get started, <a ng-href="#/{{course.id}}/{{semester.id}}/questions/create">Create a question.</a></span>
+					</td>
+				</tr>
+
+				<tr ng-show="questionPage.questions != null && questionPage.questions.length < 1 && templateType == 'trash'">
+					<td class="alert">
+						<span>There are no questions in the bin!</span>
+					</td>
+				</tr>
+
+				<tr ng-show="questionPage.questions != null && (questionPage.questions | filter:searchText | filter:search).length < 1 && (searchText.length > 0 || search != null)">
+					<td class="alert">
+						<span>No questions match your search term or filter! <a href="" ng-click="searchText = ''; search = null">Clear your search terms to see more results.</a></span>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div ng-show="questionPage.totalPages > 1">
+			<pagination
+				previous-text="&laquo;" next-text="&raquo;"
+				num-pages="questionPage.totalPages" current-page="questionPage.pageNum"
+				max-size="5" on-select-page="changePage(page)"></pagination>
+		</div>
+	</div>
+</div>
+
+<div modal="copyModalShouldBeOpen" close="copyModalClose()" options="modalOptions">
+	<div class="modal-header">
+		<button type="button" class="close" ng-click="copyModalClose()" aria-hidden="true">&times;</button>
+		<h3>Copy Selected Questions</h3>
+	</div>
+	<div class="modal-body">
+		<p>Choose a course and semester to copy this question to below:</p>
+		<form>
+			<div class="control-group">
+				<label class="control-label" for="copyToCourse">Choose Course</label>
+				<div class="controls">
+					<select id="copyToCourse" class="input-block-level"
+						ng-model="selectedCourse" ng-options="c.name for c in coursePage.courses"></select>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="copyToSemester">Choose Semester</label>
+				<div class="controls">
+					<select id="copyToSemester" class="input-block-level"
+						ng-model="selectedSemester" ng-options="s.name for s in semesterPage.semesters"></select>
+				</div>
+			</div>
+		</form>
+		<p>Reminder: All copied questions will have their responses reset to 0.</p>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-success" ng-click="copy()">Copy Selected</button>
+		<button class="btn" ng-click="copyModalClose()">Cancel</button>
+	</div>
+</div>
+
+
+<div modal="qrModalShouldBeOpen" close="qrModalClose()" options="modalOptions">
+	<div class="modal-header">
+		<button type="button" class="close" ng-click="qrModalClose()" aria-hidden="true">&times;</button>
+		<h3>QR Code for Question {{qrQuestion.id}}</h3>
+	</div>
+	<div class="modal-body">
+		<div style="text-align: center;">
+			<p>Right-click and choose 'Save Image As...' to download.</p>
+			<a ng-href="https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=http%3A%2F%2Fqc.auckland.ac.nz%2Fanswer%2F{{qrQuestion.id}}" target="_blank" >
+				<img ng-src="https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=http%3A%2F%2Fqc.auckland.ac.nz%2Fanswer%2F{{qrQuestion.id}}"></img>
+			</a>
+			<p>This QR code links to the following URL: <a ng-href="http://qc.auckland.ac.nz/answer/{{qrQuestion.id}}">http://qc.auckland.ac.nz/answer/{{qrQuestion.id}}</a></p>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-primary" ng-click="qrModalClose()">Close</button>
+	</div>
+</div>

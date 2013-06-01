@@ -1,0 +1,33 @@
+<a
+	style="color: black;"
+	href="" ng-click="termModalOpen()" class="pull-left" ng-transclude></a>
+
+<div modal="termModalShouldBeOpen" close="termModalClose()" options="options">
+	<div class="modal-header">
+		<button type="button" class="close" ng-click="termModalClose()" aria-hidden="true">&times;</button>
+		<h3>Change Course or Semester</h3>
+	</div>
+	<div class="modal-body">
+		<p>Change course or semester below:</p>
+		<form>
+			<div class="control-group">
+				<label class="control-label" for="copyToCourse">Choose Course</label>
+				<div class="controls">
+					<select id="copyToCourse" class="input-block-level"
+						ng-model="selectedCourse" ng-options="c.name for c in coursePage.courses"></select>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="copyToSemester">Choose Semester</label>
+				<div class="controls">
+					<select id="copyToSemester" class="input-block-level"
+						ng-model="selectedSemester" ng-options="s.name for s in semesterPage.semesters"></select>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-primary" ng-click="termModalGo()">Go to Course</button>
+		<button class="btn" ng-click="termModalClose()">Cancel</button>
+	</div>
+</div>
